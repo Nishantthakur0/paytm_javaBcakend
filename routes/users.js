@@ -1,5 +1,5 @@
 import express from "express";
-import { Usermodel } from "../src/db.js";
+import { Accountmodel, Usermodel } from "../src/db.js";
 import { JWT_PASSWORD } from "../src/config.js";
 import { middleware } from "../src/middleware.js";
 import jwt from "jsonwebtoken";
@@ -35,6 +35,10 @@ usersrouter.post("/signup",async(req,res)=>{
     res.json({
         message: "User Signed In"
     })
+    await Accountmodel.create({
+        userId,
+        balance: 1 + Math.random() * 10000
+    })
 
 })
 const signinschema = z.object({
@@ -42,8 +46,8 @@ const signinschema = z.object({
     password: z.string()
 })
 usersrouter.post("/signin",async (req,res) => {
-    const {succes} = signinschema.safeParse(req.body);
-    if(!succes){
+    const {success} = signinschema.safeParse(req.body);
+    if(!success){
         return res.json({
             message: "User already exist"
         })
@@ -74,8 +78,8 @@ const updateschema = z.object({
     lastname: z.string()
 })
 usersrouter.put("/",middleware,async(req,res) =>{
-    const {sucess} = updateschema.safeParse(req.body);
-    if (!sucess){
+    const {success} = updateschema.safeParse(req.body);
+    if (!success){
         res.json({
             message: "Error while Updating"
         })
