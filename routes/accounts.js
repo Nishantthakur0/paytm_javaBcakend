@@ -1,6 +1,6 @@
 import express from "express";
-import { middleware } from "../src/middleware";
-import { Accountmodel } from "../src/db";
+import { middleware } from "../src/middleware.js";
+import { Accountmodel } from "../src/db.js";
 import mongoose from "mongoose";
 const accountrouter = express.Router();
 accountrouter.get("/balance",middleware,async (req,res) => {

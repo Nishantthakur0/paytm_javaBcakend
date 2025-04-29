@@ -12,7 +12,7 @@ const signupschema = z.object({
     lastname: z.string()
 })
 usersrouter.post("/signup",async(req,res)=>{
-    const { success } = signupschema.safeParse(req.body); // Corrected typo
+    const { success } = signupschema.safeParse(req.body); 
     if (!success) {
         return res.json({
             message: "Incorrect syntax"
@@ -26,17 +26,17 @@ usersrouter.post("/signup",async(req,res)=>{
             message: "User already exist"
         })
     }
-    await Usermodel.create({
+    const user = await Usermodel.create({
         username: req.body.username,
         password: req.body.password,
-        firstname: req.body.password,
+        firstname: req.body.firstName,
         lastname: req.body.lastname
     })
     res.json({
         message: "User Signed In"
     })
     await Accountmodel.create({
-        userId,
+        userId: user._id,
         balance: 1 + Math.random() * 10000
     })
 
